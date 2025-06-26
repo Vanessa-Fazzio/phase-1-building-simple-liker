@@ -3,7 +3,59 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
-
+document.addEventListener("DOMContentLoaded", () => {
+  // Hide the modal initially
+  const modal = document.getElementById("modal");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+  modal.classList.add("hidden");
+  const hearts = document.querySelectorAll(".like-glyph");
+  
+  hearts.forEach(heart => {
+    heart.addEventListener("click", () => {
+      mimicServerCall()
+        .then(() => {
+          if (heart.textContent === EMPTY_HEART) {
+            heart.textContent = FULL_HEART;
+            heart.classList.add("activated-heart");
+          } else {
+            heart.textContent = EMPTY_HEART;
+            heart.classList.remove("activated-heart");
+          }
+        })
+        .catch(error => {
+          if (modal.classList.contains("hidden")) {
+            modal.classList.remove("hidden");
+            const modalMessage = modal.querySelector("#modal-message");
+            if (modalMessage) {
+              modalMessage.textContent = error;
+            }
+          }
+          // Display the error message in the modal
+          const modalMessage = modal.querySelector("#modal-message");
+          if (modalMessage) {
+            modalMessage.textContent = error;
+          }
+          const modal = document.getElementById("modal");
+          modal.classList.remove("hidden");
+          const msg = modal.querySelector("#modal-message");
+          if (msg) {
+            msg.textContent = error;
+          }
+          // Hide the modal after 3 seconds
+          modal.classList.remove("hidden");
+          setTimeout(() => {
+            modal.classList.add("hidden");
+          }, 3000);
+          modal.querySelector("#modal-message").textContent = error;
+          setTimeout(() => {
+            modal.classList.add("hidden");
+          }, 3000);
+        });
+    });
+  });
+});
 
 
 
